@@ -18,24 +18,19 @@ public class Main {
             if (opcion==1)
             {
                 agregarProducto(sc);
-
-
             } else if (opcion==2) {
-                //mostar lista de operacion
                 mostarListaDeProducto();
             }else if (opcion==3) {
-                //actualizar cantidad de produto
-
+                actualizarStockProducto(sc);
             }else if (opcion==4) {
-            //eliminar producto
                 eliminarProducto(sc);
-            }
+            }else{System.out.println("opcion no valida.");}
         }while (opcion!=5);{
             if (sc!=null){sc.close();}
             System.out.println("saliendo del programa...");}
-
-
     }
+
+
     public static void mostrarMenu()
     {
         System.out.println(" ");
@@ -57,18 +52,25 @@ public class Main {
         listaProducto.add("1023,Pepsi 3L,1,18.00");
     }
     public static void agregarProducto(Scanner sc){
-        String codigoNuevoProducto;
-        do{
-            System.out.print("Ingresa el codigo del producto: ");
-            codigoNuevoProducto = sc.next();
+        System.out.print("Ingresa el codigo del producto con este formato 0000: ");
+        String codigoNuevoProducto = sc.next();
+        if (existeCodigo(codigoNuevoProducto))
+        {
+            //si existe el codigo
+            while(existeCodigo(codigoNuevoProducto))
+            {
+                System.out.print("Ingresa otro codigo ya existe: ");
+                codigoNuevoProducto = sc.next();
+            }
+            System.out.print(" ");
+            System.out.println("codigo libre siguiendo el registro...");
         }
-        while (validarCodigo(codigoNuevoProducto));
         System.out.print("Ingresa el nombre del producto: ");
         String nombreProductoNuevo = sc.next();
         System.out.print("Ingresa el stock del producto:  ");
-        int stockProductoNuevo = sc.nextInt();
+        String stockProductoNuevo = sc.next();
         System.out.print("Ingresa el precio del producto: ");
-        double precioProductoNuevo = sc.nextDouble();
+        String precioProductoNuevo = sc.next();
         String nuevoProducto = codigoNuevoProducto+","+nombreProductoNuevo+","+stockProductoNuevo+","+precioProductoNuevo;
         listaProducto.add(nuevoProducto);
         System.out.println("registro exitoso del nuevo produco: "+codigoNuevoProducto);
@@ -90,7 +92,33 @@ public class Main {
         }
     }
 
-    public static boolean validarCodigo(String codigo)
+    private static void actualizarStockProducto(Scanner sc) {
+        System.out.print("Ingresa el codigo del producto con este formato 0000: ");
+        String codigoProducto= sc.next();
+        if (existeCodigo(codigoProducto))
+        {
+            System.out.println("el pruducto existe en la lista...");
+            System.out.print("Ingrese la nueva cantidad de stock: ");
+            String nuevoStock = sc.next();
+           for (String producto:listaProducto)
+           {
+              String codigoTemp = producto.split(",")[0];
+              String nombreTemp = producto.split(",")[1];
+              String stockTemp =  producto.split(",")[2];
+              String precioTemp = producto.split(",")[3];
+               if (codigoTemp.equals(codigoProducto))
+               {
+                   String nuevaActualizacionProducto = codigoProducto+","+nombreTemp+","+nuevoStock+","+precioTemp;
+                   listaProducto.set(listaProducto.indexOf(producto),nuevaActualizacionProducto);
+                   System.out.println("actualización exitosa del estock de: "+stockTemp+" a: "+nuevoStock);
+                   break;
+               }
+           }
+
+        }else{System.out.println("no existe ningún producto con este codigo: "+codigoProducto);}
+    }
+
+    public static boolean existeCodigo(String codigo)
     {
         if(!listaProducto.isEmpty())
         {
@@ -108,7 +136,7 @@ public class Main {
         System.out.print("Ingrese un codigo con este formato 0000: ");
         String codigoProdcutoAEliminar= sc.next();
 
-        if (validarCodigo(codigoProdcutoAEliminar))
+        if (existeCodigo(codigoProdcutoAEliminar))
         {
             for (String producto:listaProducto)
             {
