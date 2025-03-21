@@ -22,18 +22,23 @@ public class Main {
                 //mostar lista de operacion
                 mostarListaDeProducto();
             }else if (opcion==3) {
+                //actualizar cantidad de produto
 
             }else if (opcion==4) {
-
+            //eliminar producto
+                System.out.print("Ingrese un codigo con este formato 0000: ");
+                String codigoProdcutoAEliminar= sc.next();
+                eliminarProducto(codigoProdcutoAEliminar);
             }
         }while (opcion!=5);{
             if (sc!=null){sc.close();}
-            System.out.println("saliendo del programa");}
+            System.out.println("saliendo del programa...");}
 
 
     }
     public static void mostrarMenu()
     {
+        System.out.println(" ");
         System.out.println("***************** MENU ****************");
         System.out.println("* 1) Agregar Producto                 *");
         System.out.println("* 2) Mostrar Producto                 *");
@@ -56,16 +61,47 @@ public class Main {
         if (listaProducto.isEmpty())
         {System.out.println("lista de productos vacios");}
         else {
+            System.out.println(" ");
+            System.out.println("cantidad de productos ("+listaProducto.size()+")");
+            System.out.println("mostrando listado de productos...");
+            System.out.println(" ");
             for (String productoTemp: listaProducto){
                 String[] atributos = productoTemp.split(",");
-                System.out.println("Codigo:    "+atributos[0]);
-                System.out.println("Nombre:    "+atributos[1]);
-                System.out.println("Stock:     "+atributos[2]);
-                System.out.println("Precio:     Q "+atributos[3]);
-                System.out.println("");
+                System.out.println("Codigo: "+atributos[0]+" Nombre: "+atributos[1]+" Stock: "+atributos[2]+" Precio: Q "+atributos[3]);
             }
             System.out.println("-------- fin de operacion -----------");
         }
+    }
 
+    public static boolean validarCodigo(String codigo)
+    {
+        if(!listaProducto.isEmpty())
+        {
+            for(String producto: listaProducto)
+            {
+                String codigoTemp = producto.split(",")[0];
+                if (codigoTemp.equals(codigo))
+                {return true;}
+            }
+        }return false;
+    }
+
+    public static void eliminarProducto(String codigo)
+    {
+        if (validarCodigo(codigo))
+        {
+            for (String producto:listaProducto)
+            {
+                String codigoTemp = producto.split(",")[0];
+                if (codigoTemp.equals(codigo))
+                {
+                    listaProducto.remove(producto);
+                    System.out.println("se elimino correctamente el producto.");
+                    break;
+                }
+            }
+        }else {
+            System.out.println("no se encontro nigún producto con el codigo ingresado.");
+        }
     }
 }
