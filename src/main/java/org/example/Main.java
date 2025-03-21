@@ -17,6 +17,8 @@ public class Main {
 
             if (opcion==1)
             {
+                agregarProducto(sc);
+
 
             } else if (opcion==2) {
                 //mostar lista de operacion
@@ -26,9 +28,7 @@ public class Main {
 
             }else if (opcion==4) {
             //eliminar producto
-                System.out.print("Ingrese un codigo con este formato 0000: ");
-                String codigoProdcutoAEliminar= sc.next();
-                eliminarProducto(codigoProdcutoAEliminar);
+                eliminarProducto(sc);
             }
         }while (opcion!=5);{
             if (sc!=null){sc.close();}
@@ -56,6 +56,24 @@ public class Main {
         listaProducto.add("1022,Sopa Instantanea,8,5.00");
         listaProducto.add("1023,Pepsi 3L,1,18.00");
     }
+    public static void agregarProducto(Scanner sc){
+        String codigoNuevoProducto;
+        do{
+            System.out.print("Ingresa el codigo del producto: ");
+            codigoNuevoProducto = sc.next();
+        }
+        while (validarCodigo(codigoNuevoProducto));
+        System.out.print("Ingresa el nombre del producto: ");
+        String nombreProductoNuevo = sc.next();
+        System.out.print("Ingresa el stock del producto:  ");
+        int stockProductoNuevo = sc.nextInt();
+        System.out.print("Ingresa el precio del producto: ");
+        double precioProductoNuevo = sc.nextDouble();
+        String nuevoProducto = codigoNuevoProducto+","+nombreProductoNuevo+","+stockProductoNuevo+","+precioProductoNuevo;
+        listaProducto.add(nuevoProducto);
+        System.out.println("registro exitoso del nuevo produco: "+codigoNuevoProducto);
+
+    }
 
     public static void mostarListaDeProducto(){
         if (listaProducto.isEmpty())
@@ -64,7 +82,6 @@ public class Main {
             System.out.println(" ");
             System.out.println("cantidad de productos ("+listaProducto.size()+")");
             System.out.println("mostrando listado de productos...");
-            System.out.println(" ");
             for (String productoTemp: listaProducto){
                 String[] atributos = productoTemp.split(",");
                 System.out.println("Codigo: "+atributos[0]+" Nombre: "+atributos[1]+" Stock: "+atributos[2]+" Precio: Q "+atributos[3]);
@@ -86,14 +103,17 @@ public class Main {
         }return false;
     }
 
-    public static void eliminarProducto(String codigo)
+    public static void eliminarProducto( Scanner sc)
     {
-        if (validarCodigo(codigo))
+        System.out.print("Ingrese un codigo con este formato 0000: ");
+        String codigoProdcutoAEliminar= sc.next();
+
+        if (validarCodigo(codigoProdcutoAEliminar))
         {
             for (String producto:listaProducto)
             {
                 String codigoTemp = producto.split(",")[0];
-                if (codigoTemp.equals(codigo))
+                if (codigoTemp.equals(codigoProdcutoAEliminar))
                 {
                     listaProducto.remove(producto);
                     System.out.println("se elimino correctamente el producto.");
@@ -104,4 +124,5 @@ public class Main {
             System.out.println("no se encontro nigún producto con el codigo ingresado.");
         }
     }
+
 }
