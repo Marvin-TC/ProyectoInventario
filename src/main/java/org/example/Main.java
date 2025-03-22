@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class Main {
     public static List<String> listaProducto =new ArrayList<>();
+    private static final int IVA_REGIMEN_GENERAL=12;
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
@@ -14,7 +15,6 @@ public class Main {
         do{
             mostrarMenu();
             opcion = sc.nextInt();
-
             if (opcion==1)
             {
                 agregarProducto(sc);
@@ -24,7 +24,10 @@ public class Main {
                 actualizarStockProducto(sc);
             }else if (opcion==4) {
                 eliminarProducto(sc);
-            }else{System.out.println("opcion no valida.");}
+            }else{
+                if (opcion!=5)
+                System.out.println("opcion no valida.");
+            }
         }while (opcion!=5);{
             if (sc!=null){sc.close();}
             System.out.println("saliendo del programa...");}
@@ -52,25 +55,27 @@ public class Main {
         listaProducto.add("1023,Pepsi 3L,1,18.00");
     }
     public static void agregarProducto(Scanner sc){
+        if (sc.hasNextLine())
+            sc.nextLine();
         System.out.print("Ingresa el codigo del producto con este formato 0000: ");
-        String codigoNuevoProducto = sc.next();
+        String codigoNuevoProducto = sc.nextLine();
         if (existeCodigo(codigoNuevoProducto))
         {
             //si existe el codigo
             while(existeCodigo(codigoNuevoProducto))
             {
                 System.out.print("Ingresa otro codigo ya existe: ");
-                codigoNuevoProducto = sc.next();
+                codigoNuevoProducto = sc.nextLine();
             }
             System.out.print(" ");
             System.out.println("codigo libre siguiendo el registro...");
         }
         System.out.print("Ingresa el nombre del producto: ");
-        String nombreProductoNuevo = sc.next();
+        String nombreProductoNuevo = sc.nextLine();
         System.out.print("Ingresa el stock del producto:  ");
-        String stockProductoNuevo = sc.next();
+        String stockProductoNuevo = sc.nextLine();
         System.out.print("Ingresa el precio del producto: ");
-        String precioProductoNuevo = sc.next();
+        String precioProductoNuevo = sc.nextLine();
         String nuevoProducto = codigoNuevoProducto+","+nombreProductoNuevo+","+stockProductoNuevo+","+precioProductoNuevo;
         listaProducto.add(nuevoProducto);
         System.out.println("registro exitoso del nuevo produco: "+codigoNuevoProducto);
@@ -86,7 +91,9 @@ public class Main {
             System.out.println("mostrando listado de productos...");
             for (String productoTemp: listaProducto){
                 String[] atributos = productoTemp.split(",");
-                System.out.println("Codigo: "+atributos[0]+" Nombre: "+atributos[1]+" Stock: "+atributos[2]+" Precio: Q "+atributos[3]);
+                double precioProducto = Double.parseDouble(productoTemp.split(",")[3]);
+                double precioSinIva= precioProducto /(1+(IVA_REGIMEN_GENERAL/100.0));
+                System.out.println("Codigo: "+atributos[0]+" Nombre: "+atributos[1]+" Stock: "+atributos[2]+" Precio: Q "+atributos[3]+" Precion Sin IVA: Q "+precioSinIva);
             }
             System.out.println("-------- fin de operacion -----------");
         }
